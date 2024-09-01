@@ -1,0 +1,6 @@
+asarPy
+customtkinter
+darkdetect
+packaging
+pyzbar
+Pillow
