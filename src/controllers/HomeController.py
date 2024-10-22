@@ -13,7 +13,7 @@ class HomeController(Controller):
     #        Constructor
     # -----------------------------------------------------------------------
     def __init__(self):
-        self.homeView = self.loadView("Home")
+        self.view = self.loadView("Main")
 
     # -----------------------------------------------------------------------
     #        Methods
@@ -22,10 +22,18 @@ class HomeController(Controller):
     
     def detectedCode(self, imagePath):
         try:
+            tab = []
             with Image.open(imagePath) as img:
+                index = 0
                 for code in decode(img):
-                    code_data = code.data.decode("utf-8")
-                    self.homeView._add_table(code_data)
+                    index +=1
+                    print(code)
+                    tab.append(code)
+                    
+                if index >1 :
+                    return tab
+                else:
+                    return tab
             return True
         except OSError:
             messagebox.showinfo("Erreur", "Vous devez selectioner une image")
@@ -37,4 +45,4 @@ class HomeController(Controller):
     """
 
     def main(self):
-        self.homeView.main()
+        self.view.main()
