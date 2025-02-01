@@ -1,5 +1,6 @@
 <p align="center">
     <h1 align="center">DETECTOR CODEBARE</h1>
+	<h3 align="center">VERSION WEB</h3>
 </p>
 <p align="center">
     <em> A small app for personal use </em>
@@ -21,22 +22,20 @@
 
 #####  Table of Contents
 
-- [ Getting Started](#-getting-started)
-    - [ Prerequisites](#-prerequisites)
-    - [ Installation](#-installation)
-    - [ Usage](#-usage)
+- [ Getting Started](#getting-started)
+    - [ Prerequisites](#prerequisites)
+    - [ Installation](#installation)
 
-- [ License](#-license)
-- [ Acknowledgments](#-acknowledgments)
+- [ License](#license)
 
 ---
 
 
 ##  Getting Started
 
-###  Prerequisites
+###  Prerequisites Linux 
 
-- **Python**: `version 3.10.12`
+- **Python**: `version 3.10`
 - **libzbar0**
 - **python3-tk**
 
@@ -54,17 +53,9 @@ Build the project from source:
 ❯ cd appdetectedcodebare
 ```
 
-3. Install the required dependencies:
+3. To run the project, execute the following command:
 ```sh
-❯ pip install -r requirements.txt
-```
-
-###  Usage
-
-To run the project, execute the following command:
-
-```sh
-❯ python main.py
+❯ ./run.sh
 ```
 
 ---
