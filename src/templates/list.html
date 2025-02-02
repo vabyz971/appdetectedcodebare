@@ -1,0 +1,96 @@
+{%extends "base.html" %} {% block centent %}
+
+<div class="box table-container">
+  <table class="table is-fullwidth is-hoverable">
+    <thead>
+      <tr>
+        <th class="has-text-centered">N°</th>
+        <th>Code</th>
+        <th class="has-text-centered">Type</th>
+        <th class="has-text-centered">Quality</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for value in context.results %}
+      <tr>
+        <td class="has-text-centered">{{loop.index}}</td>
+        <td>
+          <div class="is-flex is-align-items-center">
+            <code id="code-{{value.data}}">{{ value.data }}</code>
+            <button
+              class="button is-small is-link ml-2"
+              onclick="copyCode('code-{{ value.data }}')"
+            >
+              <span class="icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-clipboard-copy"
+                >
+                  <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
+                  <path
+                    d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"
+                  />
+                  <path d="M16 4h2a2 2 0 0 1 2 2v4" />
+                  <path d="M21 14H11" />
+                  <path d="m15 10-4 4 4 4" />
+                </svg>
+              </span>
+            </button>
+          </div>
+        </td>
+        <td class="has-text-centered">{{value.type}}</td>
+        <td class="has-text-centered">{{value.quality}}</td>
+      </tr>
+      {% endfor %}
+      <!-- Ajouter d'autres lignes selon le même modèle -->
+    </tbody>
+  </table>
+</div>
+{{context.count}}
+<br/>
+{{context}}
+
+<div
+  id="copyNotification"
+  class="notification is-success is-light is-hidden"
+  style="position: fixed; top: 5rem; right: 20px"
+>
+  Code copié dans le presse-papier !
+</div>
+
+{% endblock %} {% block script %}
+
+<script>
+  function copyCode(elementId) {
+    const codeElement = document.getElementById(elementId);
+    const codeText = codeElement.innerText;
+    console.log(codeText)
+
+    navigator.clipboard
+      .writeText(codeText)
+      .then(() => {
+        showNotification();
+      })
+      .catch((err) => {
+        console.error("Erreur de copie : ", err);
+      });
+  }
+
+  function showNotification() {
+    const notification = document.getElementById("copyNotification");
+    notification.classList.remove("is-hidden");
+    setTimeout(() => {
+      notification.classList.add("is-hidden");
+    }, 2000);
+  }
+</script>
+
+{%endblock%}

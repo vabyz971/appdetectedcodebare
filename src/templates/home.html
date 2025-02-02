@@ -1,0 +1,59 @@
+{%extends "base.html" %} {% block centent %}
+
+<div class="container">
+  <section class="hero is-fullheight">
+    <div class="hero-body">
+      {% if code %} {% for code in info %}
+      <div class="card">
+        <header class="card-header">
+          <p class="card-header-title">{{code['data']}}</p>
+          <button class="card-header-icon" aria-label="more options">
+            <span class="icon">
+              <i class="fas fa-angle-down" aria-hidden="true"></i>
+            </span>
+          </button>
+        </header>
+      </div>
+      {% endfor %} {% else %}
+
+      <div class="is-flex align-items is-flex-direction-column">
+        <p class="title">Add File</p>
+        <p class="subtitle">support file images</p>
+        <div class="file is-boxed">
+          <form action="/upload" method="post" enctype="multipart/form-data">
+            <label class="file-label">
+              <input class="file-input" type="file" name="file" />
+              <span class="file-cta">
+                <span class="file-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-upload"
+                  >
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" x2="12" y1="3" y2="15" />
+                  </svg>
+                </span>
+                <span class="file-label"> Choose a file… </span>
+              </span>
+            </label>
+            <div class="control pt-3">
+              <button class="button is-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+</div>
+
+{% endblock %}
