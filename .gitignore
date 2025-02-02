@@ -164,3 +164,7 @@ cython_debug/
 # IDE
 .vscode
 .idea
+
+
+#Mycode
+/src/static/cropped_images

@@ -1,78 +1,106 @@
 {%extends "base.html" %} {% block centent %}
 
-<div class="box table-container">
-  <table class="table is-fullwidth is-hoverable">
-    <thead>
-      <tr>
-        <th class="has-text-centered">N°</th>
-        <th>Code</th>
-        <th class="has-text-centered">Type</th>
-        <th class="has-text-centered">Quality</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for value in context.results %}
-      <tr>
-        <td class="has-text-centered">{{loop.index}}</td>
-        <td>
-          <div class="is-flex is-align-items-center">
-            <code id="code-{{value.data}}">{{ value.data }}</code>
-            <button
-              class="button is-small is-link ml-2"
-              onclick="copyCode('code-{{ value.data }}')"
-            >
-              <span class="icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-clipboard-copy"
-                >
-                  <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
-                  <path
-                    d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"
-                  />
-                  <path d="M16 4h2a2 2 0 0 1 2 2v4" />
-                  <path d="M21 14H11" />
-                  <path d="m15 10-4 4 4 4" />
-                </svg>
-              </span>
-            </button>
-          </div>
-        </td>
-        <td class="has-text-centered">{{value.type}}</td>
-        <td class="has-text-centered">{{value.quality}}</td>
-      </tr>
-      {% endfor %}
-      <!-- Ajouter d'autres lignes selon le même modèle -->
-    </tbody>
-  </table>
-</div>
-{{context.count}}
-<br/>
-{{context}}
+<div class="container is-fullhd">
+  <nav class="level is-mobile">
+    <div class="level-item has-text-centered">
+      <div>
+        <p class="heading">Total</p>
+        <p class="title">{{ context.count }}</p>
+      </div>
+    </div>
+    <div class="level-item has-text-centered">
+      <div>
+        <p class="heading">Quality Code</p>
+        <p class="title">{{ context.results|map(attribute='quality')|sum }}</p>
+      </div>
+    </div>
+  </nav>
+  <div class="table-container">
+    <table class="table is-fullwidth is-striped">
+      <thead>
+        <tr>
+          <th class="has-text-centered is-link">N°</th>
+          <th class="has-text-centered">Code</th>
+          <th class="has-text-centered">Type</th>
+          <th class="has-text-centered">Quality</th>
+          <th class="has-text-centered">Image</th>
+          <th class="has-text-centered">Zone de détection</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for value in context.results %}
+        <tr>
+          <td class="has-text-centered">{{loop.index}}</td>
+          <td>
+            <div class="is-flex is-align-items-center">
+              <code id="code-{{loop.index}}">{{ value.data }}</code>
+              <button
+                class="button is-small is-link ml-2"
+                onclick="copyCode('code-{{loop.index}}')"
+              >
+                <span class="icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-clipboard-copy"
+                  >
+                    <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
+                    <path
+                      d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"
+                    />
+                    <path d="M16 4h2a2 2 0 0 1 2 2v4" />
+                    <path d="M21 14H11" />
+                    <path d="m15 10-4 4 4 4" />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </td>
+          <td class="has-text-centered">{{value.type}}</td>
+          <td class="has-text-centered">{{value.quality}}</td>
+          <td>
+            <figure class="image is-5by3">
+              <a href="{{ value.image }}" target="_blank">
+                <img src="{{ value.image }}" alt="Code {{ value.type }}" />
+              </a>
+            </figure>
+          </td>
+          <td>
+            <div class="p-2">
+              <small>X: {{ value.position.left }}px</small><br />
+              <small>Y: {{ value.position.top }}px</small><br />
+              <small>L: {{ value.position.width }}px</small><br />
+              <small>H: {{ value.position.height }}px</small>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
-<div
-  id="copyNotification"
-  class="notification is-success is-light is-hidden"
-  style="position: fixed; top: 5rem; right: 20px"
->
-  Code copié dans le presse-papier !
+  <div
+    id="copyNotification"
+    class="notification is-success is-light is-hidden"
+    style="position: fixed; top: 5rem; right: 20px"
+  >
+    Code copié dans le presse-papier !
+  </div>
 </div>
-
 {% endblock %} {% block script %}
 
 <script>
   function copyCode(elementId) {
     const codeElement = document.getElementById(elementId);
     const codeText = codeElement.innerText;
-    console.log(codeText)
+    console.log(codeText);
 
     navigator.clipboard
       .writeText(codeText)
