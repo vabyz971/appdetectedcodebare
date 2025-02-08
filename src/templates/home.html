@@ -91,3 +91,18 @@
 </div>
 
 {% endblock %}
+
+
+{% block script %} 
+<script>
+
+ // Toggle mobile menu
+ const alertButton = document.getElementById("alert-close");
+  const alertDiv = document.getElementById("alert-danger");
+
+  alertButton.addEventListener("click", () => {
+    alertDiv.classList.toggle("hidden");
+  });
+
+</script>
+{% endblock %}

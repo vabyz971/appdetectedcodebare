@@ -87,5 +87,18 @@ class ProcessController(View):
     def dispatch_request(self):
         if request.method == "POST":
             file = request.files['file']
+            if not file:
+                context = {
+                    "erreur": "Vous devez ajouter un fichier"
+                }
+                return render_template("home.html", context=context)
+
+            # Vérifier si le fichier est une image
+            if not (file.mimetype.startswith('image/') or file.filename.lower().split('.')[-1] in ['png', 'jpg', 'jpeg', 'gif', 'bmp']):
+                context = {
+                    "erreur": "Seuls les images sont autoriser \n - png, jpg, jpeg, gif, bmp"
+                }
+                return render_template("home.html", context=context)
+
             process = self.process_image(file)
             return render_template("list.html", context=json.loads(process))

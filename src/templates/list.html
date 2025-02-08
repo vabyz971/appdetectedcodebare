@@ -1,109 +1,105 @@
 {%extends "base.html" %} {% block centent %}
 
 <div class="container is-fullhd">
-  <nav class="level is-mobile">
-    <div class="level-item has-text-centered">
-      <div>
-        <p class="heading">Total</p>
-        <p class="title">{{ context.count }}</p>
+  <div class="level is-mobile">
+    <section class="bg-white dark:bg-gray-800 rounded-lg">
+      <div
+        class="max-w-screen-xl px-4 py-8 mx-auto text-center lg:py-8 lg:px-6"
+      >
+        <dl
+          class="grid max-w-screen-md gap-8 mx-auto text-gray-900 sm:grid-cols-2 dark:text-white"
+        >
+          <div class="flex flex-col items-center justify-center">
+            <dt class="mb-2 text-3xl md:text-4xl font-extrabold">
+              {{ context.count }}
+            </dt>
+            <dd class="font-light text-gray-500 dark:text-gray-400">Total</dd>
+          </div>
+          <div class="flex flex-col items-center justify-center">
+            <dt class="mb-2 text-3xl md:text-4xl font-extrabold">
+              {{ context.results|map(attribute='quality')|sum }}
+            </dt>
+            <dd class="font-light text-gray-500 dark:text-gray-400">
+              Quality Code
+            </dd>
+          </div>
+        </dl>
       </div>
-    </div>
-    <div class="level-item has-text-centered">
-      <div>
-        <p class="heading">Quality Code</p>
-        <p class="title">{{ context.results|map(attribute='quality')|sum }}</p>
-      </div>
-    </div>
-  </nav>
-  <div class="table-container">
-    <table class="table is-fullwidth is-striped">
-      <thead>
-        <tr>
-          <th class="has-text-centered is-link">N°</th>
-          <th class="has-text-centered">Code</th>
-          <th class="has-text-centered">Type</th>
-          <th class="has-text-centered">Quality</th>
-          <th class="has-text-centered">Image</th>
-          <th class="has-text-centered">Zone de détection</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for value in context.results %}
-        <tr>
-          <td class="has-text-centered">{{loop.index}}</td>
-          <td>
-            <div class="is-flex is-align-items-center">
-              <code id="code-{{loop.index}}">{{ value.data }}</code>
-              <button
-                class="button is-small is-link ml-2"
-                onclick="copyCode('code-{{loop.index}}')"
-              >
-                <span class="icon">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="lucide lucide-clipboard-copy"
-                  >
-                    <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
-                    <path
-                      d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"
-                    />
-                    <path d="M16 4h2a2 2 0 0 1 2 2v4" />
-                    <path d="M21 14H11" />
-                    <path d="m15 10-4 4 4 4" />
-                  </svg>
-                </span>
-              </button>
-            </div>
-          </td>
-          <td class="has-text-centered">{{value.type}}</td>
-          <td class="has-text-centered">{{value.quality}}</td>
-          <td>
-            <figure class="image is-5by3">
-              <a href="{{ value.image }}" target="_blank">
-                <img src="{{ value.image }}" alt="Code {{ value.type }}" />
-              </a>
-            </figure>
-          </td>
-          <td>
-            <div class="p-2">
-              <small>X: {{ value.position.left }}px</small><br />
-              <small>Y: {{ value.position.top }}px</small><br />
-              <small>L: {{ value.position.width }}px</small><br />
-              <small>H: {{ value.position.height }}px</small>
-            </div>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+    </section>
+    <div class="bg-white">
+      <div
+        class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
+      >
+        <h2 class="text-2xl font-bold tracking-tight text-gray-900">
+          List codes
+        </h2>
 
-  <div
-    id="copyNotification"
-    class="notification is-success is-light is-hidden"
-    style="position: fixed; top: 5rem; right: 20px"
-  >
-    Code copié dans le presse-papier !
+        <div
+          class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8"
+        >
+          {% for value in context.results %}
+          <div class="group relative">
+            <img
+              src="{{value.image}}"
+              alt="{{ value.data }}"
+              class="aspect-square w-full rounded-md bg-gray-200 object-scale-down group-hover:opacity-75 lg:aspect-auto lg:h-80"
+            />
+            <div class="mt-4 flex justify-between">
+              <div>
+                <h3 class="text-sm text-gray-700">
+                  <a>
+                    <span
+                      aria-hidden="true"
+                      class="absolute inset-0 cursor-pointer"
+                      onclick="copyCode('{{ value.data }}')"
+                    ></span>
+                    Quality: {{value.quality}}
+                  </a>
+                </h3>
+                <p class="mt-1 text-sm text-gray-500">Type: {{value.type}}</p>
+              </div>
+              <p class="text-sm font-medium text-gray-900">{{ value.data }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
+<div id="copyNotification" class="hidden fixed top-0 right-0 left-0 p-15">
+  <div
+    class="flex items-center p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+    role="alert"
+  >
+    <svg
+      class="shrink-0 inline w-4 h-4 me-3"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+      viewBox="0 0 20 20"
+    >
+      <path
+        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+      />
+    </svg>
+    <span class="sr-only">Info</span>
+    <div>
+      <span class="font-medium">Success</span> Code copié dans le presse-papier
+      !
+    </div>
+  </div>
+</div>
+
 {% endblock %} {% block script %}
 
 <script>
   function copyCode(elementId) {
-    const codeElement = document.getElementById(elementId);
-    const codeText = codeElement.innerText;
-    console.log(codeText);
+    console.log(elementId);
 
     navigator.clipboard
-      .writeText(codeText)
+      .writeText(elementId)
       .then(() => {
         showNotification();
       })
@@ -114,9 +110,9 @@
 
   function showNotification() {
     const notification = document.getElementById("copyNotification");
-    notification.classList.remove("is-hidden");
+    notification.classList.remove("hidden");
     setTimeout(() => {
-      notification.classList.add("is-hidden");
+      notification.classList.add("hidden");
     }, 2000);
   }
 </script>
