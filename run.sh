@@ -7,7 +7,6 @@ VENV_DIR=".venv"
 REQUIREMENTS="requirements.txt"
 
 
-
 # Fonction d'aide
 usage() {
     echo "Usage: $0 [-m mode]"
@@ -19,20 +18,8 @@ usage() {
 
 # Fonction pour initialiser l'environnement
 setup_venv() {
-    if [ ! -d $VENV_DIR ]; then
-        echo "Creation de l'environnement virtuel."
-        python3 -m venv "$VENV_DIR"
-    fi
-
     echo "Activation de l'environnement.."
     source "$VENV_DIR/bin/activate"
-
-    if [ -f $REQUIREMENTS ]; then
-        echo "Installation des dépendances..."
-        pip install -r "$REQUIREMENTS"
-    else
-        echo "Fichier $REQUIREMENTS non trouvé"
-    fi
 }
 
 # Fonction pour désactiver l'environnement
